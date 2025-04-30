@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery - V.V.S. Vignesh</title>
+  <!-- External Libraries (CDNs) - Copied from main page -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Exo+2:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Inline CSS - Simplified/Copied from main page -->
+  <style>
+    :target { /* Add smooth scroll behavior when linking to an ID */
+        scroll-margin-top: 80px; /* Adjust based on potential fixed header height */
+    }
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      font-family: 'Exo 2', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background: #0a0a1a; /* Base dark background */
+      color: #e0e0e0; /* Default text color */
+      padding-top: 5rem; /* Space for potential fixed header or just top spacing */
+    }
+    .gradient-text {
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(to right, #ffffff 70%, #22d3ee 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 8px rgba(34, 211, 238, 0.4);
+    }
+    .body-text {
+      color: #c7d2fe;
+      background: linear-gradient(to right, #e0e0ff 80%, #93c5fd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 4px rgba(34, 211, 238, 0.1);
+    }
+     .gallery-image {
+        border: 2px solid rgba(56, 189, 248, 0.3);
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+        background-color: rgba(20, 20, 40, 0.8); /* Slight background for contrast */
+     }
+    .gallery-image:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(34, 211, 238, 0.3);
+    }
+    .gallery-image img {
+        display: block;
+        width: 100%;
+        height: auto; /* Maintain aspect ratio */
+        aspect-ratio: 16 / 10; /* Example aspect ratio, adjust as needed */
+        object-fit: contain; /* Use 'contain' to see the whole image */
+    }
+    .back-link {
+      position: relative;
+      background: linear-gradient(to right, #a5f3fc 20%, #e0f2fe 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 500;
+      display: inline-block;
+      transition: text-shadow 0.3s ease-out;
+      padding-bottom: 2px;
+    }
+    .back-link:hover {
+       text-shadow: 0 0 6px rgba(56, 189, 248, 0.5);
+    }
+     .back-link::after {
+       content: '';
+       position: absolute;
+       bottom: -1px;
+       left: 0;
+       width: 0;
+       height: 1.5px;
+       background: linear-gradient(to right, #a5f3fc, #e0f2fe);
+       transition: width 0.3s ease-in-out;
+     }
+     .back-link:hover::after {
+       width: 100%;
+     }
+  </style>
+</head>
+<body>
+
+  <header class="container mx-auto px-6 py-4 text-center md:text-left">
+     <!-- === IMPORTANT: Update href if your main file is not index.html === -->
+     <a href="index (3).html" class="back-link text-lg">&larr; Back to Portfolio</a>
+     <!-- Or use index.html if you renamed the main file -->
+     <!-- <a href="index.html" class="back-link text-lg">&larr; Back to Portfolio</a> -->
+  </header>
+
+  <main class="container mx-auto px-4 md:px-6 py-8">
+
+    <h1 class="text-4xl md:text-5xl font-bold text-center gradient-text mb-12 md:mb-16">Gallery</h1>
+
+    <!-- Certificates Section -->
+    <section id="certificates" class="mb-16">
+      <h2 class="text-3xl md:text-4xl font-semibold text-center gradient-text mb-8 md:mb-10">Certificates</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+
+        <!-- === IMPORTANT: Add correct IDs and image paths === -->
+        <div id="cert-meta" class="gallery-image">
+           <img src="images\certificates\Meta.jpg" alt="Meta Data Analyst Certificate">
+           <!-- Example: <img src="images/certificates/meta_cert.jpg" alt="Meta Data Analyst Certificate"> -->
+        </div>
+        <div id="cert-gen-ai" class="gallery-image">
+           <img src="images/certificates/GenAI.jpg" alt="Generative AI Certificate">
+           <!-- Example: <img src="images/certificates/gen_ai_cert.jpg" alt="Generative AI Certificate"> -->
+        </div>
+        <div id="cert-python" class="gallery-image">
+           <img src="images/certificates/python.jpg" alt="Python Certificate">
+           <!-- Example: <img src="images/certificates/python_cert.jpg" alt="Python Certificate"> -->
+        </div>
+        <div id="cert-sql" class="gallery-image">
+           <img src="images/certificates/SQL.jpg" alt="SQL Certificate">
+           <!-- Example: <img src="images/certificates/sql_cert.jpg" alt="SQL Certificate"> -->
+        </div>
+         <div id="cert-ml" class="gallery-image">
+           <img src="images/certificates/ML.jpg" alt="Machine Learning Certificate">
+           <!-- Example: <img src="images/certificates/ml_cert.jpg" alt="Machine Learning Certificate"> -->
+        </div>
+        <!-- Add more certificate images if needed, ensure they have unique IDs if linked -->
+
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="mb-16">
+      <h2 class="text-3xl md:text-4xl font-semibold text-center gradient-text mb-8 md:mb-10">Projects</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+
+        <!-- === IMPORTANT: Add correct image paths === -->
+        <div class="gallery-image">
+           <img src="images/projects/sales.jpg" alt="Project 1 Screenshot">
+           <!-- Example: <img src="images/projects/project1.jpg" alt="Project 1 Screenshot"> -->
+        </div>
+         <div class="gallery-image">
+           <img src="images/projects/imdb.jpg" alt="Project 2 Screenshot">
+           <!-- Example: <img src="images/projects/project2.jpg" alt="Project 2 Screenshot"> -->
+        </div>
+         <div class="gallery-image">
+           <img src="images/projects/rank.jpg" alt="Project 3 Screenshot">
+           <!-- Example: <img src="images/projects/project3.jpg" alt="Project 3 Screenshot"> -->
+        </div>
+         <div class="gallery-image">
+           <img src="images/projects/flight.jpg" alt="Project 4 Screenshot">
+           <!-- Example: <img src="images/projects/project4.jpg" alt="Project 4 Screenshot"> -->
+        </div>
+        <!-- Add more project images as needed -->
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="text-center p-6 mt-12">
+     <p class="text-sm body-text opacity-70">© <span id="current-year"></span> V.V.S. Vignesh. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+      // Set Current Year in Footer
+      document.getElementById('current-year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V.V.S. Vignesh - Portfolio</title>
+  <!-- External Libraries (CDNs) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Exo+2:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Inline CSS -->
+  <style>
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      font-family: 'Exo 2', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background: #0a0a1a; /* Base dark background */
+      color: #e0e0e0; /* Default text color for better contrast */
+    }
+    .canvas-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.6; /* Slightly reduced opacity for less distraction */
+    }
+    .section {
+      padding: 6rem 1rem; /* Reduced horizontal padding slightly for mobile */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+    @media (min-width: 768px) { /* md breakpoint */
+      .section {
+        padding: 8rem 2rem; /* Restore padding on larger screens */
+      }
+    }
+    .gradient-text {
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(to right, #ffffff 70%, #22d3ee 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 8px rgba(34, 211, 238, 0.4); /* Slightly increased shadow */
+    }
+    .body-text {
+      /* Using a subtle gradient, but ensuring fallback */
+      color: #c7d2fe; /* Lighter base color for readability */
+      background: linear-gradient(to right, #e0e0ff 80%, #93c5fd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 4px rgba(34, 211, 238, 0.1);
+    }
+    .nav-item {
+      position: relative;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 500;
+      background: linear-gradient(to right, #ffffff 60%, #22d3ee 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: text-shadow 0.3s;
+      padding-bottom: 4px; /* Add space for underline */
+    }
+    .nav-item:hover {
+      text-shadow: 0 0 10px rgba(34, 211, 238, 0.6); /* Enhanced hover shadow */
+    }
+    .nav-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0; /* Position underline correctly */
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(to right, #ffffff, #22d3ee);
+      transition: width 0.3s ease-in-out;
+    }
+    .nav-item:hover::after {
+      width: 100%;
+    }
+    .logo-animation {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem; /* Slightly smaller logo */
+      font-weight: 700;
+      background: linear-gradient(to right, #ffffff 60%, #22d3ee 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 8px rgba(34, 211, 238, 0.4);
+    }
+    .role-card {
+      position: absolute;
+      width: 100%;
+      max-width: 400px;
+      opacity: 0;
+      transform: translateY(20px);
+      text-align: center;
+      z-index: 2;
+      transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; /* Smoother transition */
+    }
+    .role-card.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .profile-photo {
+      width: 150px; /* Slightly smaller */
+      height: 150px;
+      border-radius: 50%;
+      border: 3px solid #22d3ee; /* Thicker border */
+      box-shadow: 0 0 15px rgba(34, 211, 238, 0.4); /* Enhanced shadow */
+      object-fit: cover;
+      z-index: 2;
+    }
+    .premium-card {
+      background: linear-gradient(145deg, rgba(25, 25, 50, 0.9), rgba(35, 35, 70, 0.9)); /* Adjusted angle and colors */
+      border: 1px solid rgba(56, 189, 248, 0.3); /* Lighter border color */
+      border-radius: 12px;
+      transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+      position: relative;
+      z-index: 1;
+      overflow: hidden; /* Ensure pseudo-elements stay contained */
+    }
+    .premium-card:hover {
+      transform: translateY(-8px) scale(1.02); /* Subtle scale on hover */
+      box-shadow: 0 12px 25px rgba(34, 211, 238, 0.35); /* Adjusted hover shadow */
+    }
+    .premium-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0; /* Make it full width */
+      height: 3px; /* Slightly thinner */
+      background: linear-gradient(90deg, transparent, #22d3ee, transparent); /* Faded edges */
+      opacity: 0;
+      transition: opacity 0.3s ease-out;
+    }
+     .premium-card:hover::before {
+       opacity: 0.9;
+     }
+    .skill-card {
+      background: rgba(20, 20, 40, 0.9); /* Slightly darker */
+      border: 1px solid rgba(56, 189, 248, 0.2); /* Match lighter border */
+      transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+      z-index: 1;
+      border-radius: 8px; /* Consistent rounding */
+    }
+    .skill-card:hover {
+      transform: scale(1.06); /* Slightly increased scale */
+      box-shadow: 0 6px 12px rgba(34, 211, 238, 0.25); /* Adjusted shadow */
+      background: rgba(30, 30, 55, 0.95); /* Lighten background on hover */
+    }
+    .link-hover {
+      position: relative;
+      background: linear-gradient(to right, #a5f3fc 20%, #e0f2fe 100%); /* Brighter link gradient */
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 500;
+      display: inline-block; /* Ensure underline works correctly */
+      transition: text-shadow 0.3s ease-out;
+    }
+    .link-hover:hover {
+       text-shadow: 0 0 6px rgba(56, 189, 248, 0.5);
+    }
+    .link-hover::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; /* Slightly lower underline */
+      left: 0;
+      width: 0;
+      height: 1.5px; /* Slightly thicker underline */
+      background: linear-gradient(to right, #a5f3fc, #e0f2fe);
+      transition: width 0.3s ease-in-out;
+    }
+    .link-hover:hover::after {
+      width: 100%;
+    }
+
+    /* Mobile Menu Styles */
+    #mobile-menu {
+        transition: transform 0.3s ease-in-out;
+    }
+
+    /* GSAP Animation Helper Classes (Initial State) */
+    .animate-fade-in {
+        opacity: 0;
+    }
+    .animate-slide-up {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    /* Helper class for home buttons if needed for specific targeting */
+    .home-button {
+        /* Can add specific styles here if needed */
+    }
+    /* Added: Styling for certificate links */
+    .certificate-link .premium-card {
+        display: block; /* Make the card fill the link */
+    }
+
+  </style>
+</head>
+<body>
+  <canvas class="canvas-bg" id="bgCanvas"></canvas>
+
+  <nav class="fixed top-0 w-full bg-[rgba(10,10,26,0.85)] p-4 z-50 backdrop-blur-lg shadow-lg">
+    <div class="container mx-auto flex justify-between items-center">
+      <div class="logo-animation">VVS</div>
+
+      <!-- Desktop Menu -->
+      <ul class="hidden md:flex space-x-6 lg:space-x-8">
+        <li><a href="#home" class="nav-item">Home</a></li>
+        <li><a href="#about" class="nav-item">About</a></li>
+        <li><a href="#education" class="nav-item">Education</a></li>
+        <li><a href="#skills" class="nav-item">Skills</a></li>
+        <li><a href="#certifications" class="nav-item">Certifications</a></li>
+        <li><a href="#projects" class="nav-item">Projects</a></li>
+        <li><a href="#achievements" class="nav-item">Achievements</a></li>
+        <!-- ADDED: Gallery Link -->
+        <li><a href="gallery.html" class="nav-item">Gallery</a></li>
+        <li><a href="#contact" class="nav-item">Contact</a></li>
+      </ul>
+
+      <!-- Mobile Menu Button -->
+      <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none" aria-label="Toggle menu">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="md:hidden absolute top-full left-0 w-full bg-[rgba(15,15,35,0.98)] backdrop-blur-md transform -translate-y-full -z-10">
+        <ul class="flex flex-col items-center space-y-4 py-4">
+            <li><a href="#home" class="nav-item mobile-nav-item">Home</a></li>
+            <li><a href="#about" class="nav-item mobile-nav-item">About</a></li>
+            <li><a href="#education" class="nav-item mobile-nav-item">Education</a></li>
+            <li><a href="#skills" class="nav-item mobile-nav-item">Skills</a></li>
+            <li><a href="#certifications" class="nav-item mobile-nav-item">Certifications</a></li>
+            <li><a href="#projects" class="nav-item mobile-nav-item">Projects</a></li>
+            <li><a href="#achievements" class="nav-item mobile-nav-item">Achievements</a></li>
+            <!-- ADDED: Gallery Link -->
+            <li><a href="gallery.html" class="nav-item mobile-nav-item">Gallery</a></li>
+            <li><a href="#contact" class="nav-item mobile-nav-item">Contact</a></li>
+        </ul>
+    </div>
+  </nav>
+
+  <section id="home" class="section justify-center pt-24 md:pt-32">
+    <!-- === IMPORTANT: Replace with the correct RELATIVE path to your image! === -->
+    <img src="images/IMG_8769.JPG" alt="Profile Photo V.V.S. Vignesh" class="profile-photo mb-6 animate-fade-in">
+    <!-- Example: <img src="images/IMG_8769.JPG" ... > -->
+    <!-- Example: <img src="IMG_8769.JPG" ... > -->
+
+    <!-- Name -->
+    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold gradient-text mb-6 text-center animate-slide-up">V.V.S. Vignesh</h1>
+
+    <!-- Rotating Roles -->
+    <div class="relative h-12 w-full max-w-md mt-2 mb-8"> <!-- Added mb-8 for spacing -->
+      <div class="role-card active" data-role="0">
+        <p class="text-xl md:text-2xl gradient-text">Data Scientist</p>
+      </div>
+      <div class="role-card" data-role="1">
+        <p class="text-xl md:text-2xl gradient-text">Data Analyst</p>
+      </div>
+      <div class="role-card" data-role="2">
+        <p class="text-xl md:text-2xl gradient-text">Software Developer</p>
+      </div>
+    </div>
+
+    <!-- Buttons in Home Section -->
+    <div class="mt-6 flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 animate-slide-up" style="opacity: 0;">
+      <a href="#contact"
+         class="home-button inline-block px-8 py-3 rounded-lg text-base font-semibold text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 transition-all duration-300 ease-out shadow-md hover:shadow-lg hover:shadow-cyan-500/40 transform hover:-translate-y-1">
+        Contact Me
+      </a>
+      <a href="path/to/your/VVS_Vignesh_CV.pdf"  download="VVS_Vignesh_CV.pdf"
+         class="home-button inline-block px-8 py-3 rounded-lg text-base font-semibold gradient-text border border-cyan-400 hover:border-cyan-200 hover:shadow-lg hover:shadow-cyan-500/30 transition-all duration-300 ease-out transform hover:-translate-y-1">
+        <!-- === IMPORTANT: Replace href above with the correct RELATIVE path to your CV === -->
+        Download CV
+      </a>
+    </div>
+
+  </section>
+
+  <section id="about" class="section bg-[rgba(10,10,26,0.6)]">
+     <h2 class="text-4xl md:text-5xl font-bold text-center gradient-text mb-10 md:mb-12">About Me</h2>
+     <div class="text-center max-w-4xl mx-auto px-4">
+       <p class="text-base md:text-lg body-text leading-relaxed mb-4">
+         I am a visionary technologist driven by a passion for transforming data into actionable insights and building innovative solutions. My journey began with a curiosity for patterns and problem-solving, leading me to master the art of data science, analytics, and software development.
+       </p>
+       <p class="text-base md:text-lg body-text leading-relaxed mb-4">
+         As a <span class="gradient-text font-medium">Data Scientist</span>, I leverage machine learning and statistical modeling to uncover hidden trends and predict future outcomes. As a <span class="gradient-text font-medium">Data Analyst</span>, I craft compelling visualizations and dashboards that empower organizations to make informed decisions. As a <span class="gradient-text font-medium">Software Developer</span>, I design scalable, efficient applications with a focus on algorithmic precision.
+       </p>
+       <p class="text-base md:text-lg body-text leading-relaxed">
+         With a strong foundation in computer science and a relentless drive for excellence, I thrive on challenges that push the boundaries of technology. My goal is to create impactful solutions that not only solve problems but also inspire progress in a data-driven world.
+       </p>
+     </div>
+  </section>
+
+  <section id="education" class="section">
+     <h2 class="text-4xl md:text-5xl font-bold text-center gradient-text mb-10 md:mb-12">Education</h2>
+     <div class="space-y-6 md:space-y-8 max-w-4xl mx-auto px-4 w-full">
+       <div class="premium-card p-6">
+         <h3 class="text-xl md:text-2xl font-semibold gradient-text">Lovely Professional University, Jalandhar, Punjab</h3>
+         <p class="body-text mt-2 text-sm md:text-base">B.Tech in Computer Science and Engineering</p>
+         <p class="body-text mt-1 text-sm md:text-base">CGPA: 7.37</p>
+         <p class="body-text mt-1 text-xs md:text-sm opacity-80">2022 - Present</p>
+       </div>
+       <div class="premium-card p-6">
+         <h3 class="text-xl md:text-2xl font-semibold gradient-text">Narayana Junior College, Visakhapatnam, Andhra Pradesh</h3>
+         <p class="body-text mt-2 text-sm md:text-base">Intermediate</p>
+         <p class="body-text mt-1 text-sm md:text-base">Percentage: 90%</p>
+         <p class="body-text mt-1 text-xs md:text-sm opacity-80">2020 - 2022</p>
+       </div>
+       <div class="premium-card p-6">
+         <h3 class="text-xl md:text-2xl font-semibold gradient-text">Sri Ramakrishna School, Visakhapatnam, Andhra Pradesh</h3>
+         <p class="body-text mt-2 text-sm md:text-base">Matriculation</p>
+         <p class="body-text mt-1 text-sm md:text-base">Percentage: 92.6%</p>
+         <p class="body-text mt-1 text-xs md:text-sm opacity-80">2019 - 2020</p>
+       </div>
+     </div>
+  </section>
+
+  <section id="skills" class="section bg-[rgba(10,10,26,0.6)]">
+     <h2 class="text-4xl md:text-5xl font-bold text-center gradient-text mb-10 md:mb-12">Skills</h2>
+     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 max-w-6xl mx-auto px-4">
+       <div class="skill-card p-4 rounded-lg text-center"><p class="text-sm md:text-base body-text">Python</p></div>
+       <div class="skill-card p-4 rounded-lg text-center"><p class="text-sm md:text-base body-text">Java</p></div>
+       <div class="skill-card p-4 rounded-lg text-center"><p class="text-sm md:text-base body-text">C++</p></div>
+       <div class="skill-card p-4 rounded-lg text-center"><p class="text-sm md:text-base body-text">R</p></div>
+       <div class="skill-card p-4 rounded-lg text-center"><p class="text-sm md:text-base body-text">MySQL</p></div>
+       <div class="skill-card p-4 rounded-lg text-center"><p class="text-sm md:text-base body-text">Tableau</p></div>
+       <div class="skill-card p-4 rounded-lg text-center"><p class="text-sm md:text-base body-text">Excel</p></div>
+       <div class="skill-card p-4 rounded-lg text-center"><p class="text-sm md:text-base body-text">NumPy</p></div>
+       <div class="skill-card p-4 rounded-lg text-center"><p class="text-sm md:text-base body-text">Pandas</p></div>
+       <div class="skill-card p-4 rounded-lg text-center"><p class="text-sm md:text-base body-text">Matplotlib</p></div>
+       <div class="skill-card p-4 rounded-lg text-center"><p class="text-sm md:text-base body-text">Seaborn</p></div>
+       <div class="skill-card p-4 rounded-lg text-center"><p class="text-sm md:text-base body-text">Power BI</p></div>
+       <div class="skill-card p-4 rounded-lg text-center"><p class="text-sm md:text-base body-text">Big Data</p></div>
+       <div class="skill-card p-4 rounded-lg text-center"><p class="text-sm md:text-base body-text">Generative AI</p></div>
+       <div class="skill-card p-4 rounded-lg text-center"><p class="text-sm md:text-base body-text">DSA</p></div>
+       <div class="skill-card p-4 rounded-lg text-center"><p class="text-sm md:text-base body-text">Problem Solving</p></div>
+       <div class="skill-card p-4 rounded-lg text-center"><p class="text-sm md:text-base body-text">Statistics</p></div>
+       <div class="skill-card p-4 rounded-lg text-center"><p class="text-sm md:text-base body-text">Predictive Analysis</p></div>
+       <div class="skill-card p-4 rounded-lg text-center"><p class="text-sm md:text-base body-text">Project Management</p></div>
+       <div class="skill-card p-4 rounded-lg text-center"><p class="text-sm md:text-base body-text">Adaptability</p></div>
+       <div class="skill-card p-4 rounded-lg text-center"><p class="text-sm md:text-base body-text">Time Management</p></div>
+     </div>
+   </section>
+
+  <section id="certifications" class="section">
+    <h2 class="text-4xl md:text-5xl font-bold text-center gradient-text mb-10 md:mb-12">Certifications</h2>
+    <div class="space-y-6 md:space-y-8 max-w-4xl mx-auto px-4 w-full">
+      <!-- MODIFIED: Wrapped each certificate div in an <a> tag linking to gallery.html -->
+      <a href="gallery.html" class="certificate-link block">
+        <div class="premium-card p-5 md:p-6 text-center">
+          <p class="text-base md:text-lg body-text">Meta Data Analyst (Coursera, 2025)</p>
+        </div>
+      </a>
+      <a href="gallery.html" class="certificate-link block">
+        <div class="premium-card p-5 md:p-6 text-center">
+          <p class="text-base md:text-lg body-text">Introduction to Generative AI Learning Path (Google Cloud, Coursera, 2025)</p>
+        </div>
+      </a>
+      <a href="gallery.html" class="certificate-link block">
+        <div class="premium-card p-5 md:p-6 text-center">
+          <p class="text-base md:text-lg body-text">Python Programming Language (GeeksForGeeks, 2025)</p>
+        </div>
+      </a>
+      <a href="gallery.html" class="certificate-link block">
+        <div class="premium-card p-5 md:p-6 text-center">
+          <p class="text-base md:text-lg body-text">SQL and Relational Databases (IBM Developer Skills Network, 2025)</p>
+        </div>
+      </a>
+      <a href="gallery.html" class="certificate-link block">
+        <div class="premium-card p-5 md:p-6 text-center">
+          <p class="text-base md:text-lg body-text">Supervised Machine Learning (Coursera, 2024)</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section id="projects" class="section bg-[rgba(10,10,26,0.6)]">
+    <h2 class="text-4xl md:text-5xl font-bold text-center gradient-text mb-10 md:mb-12">Projects</h2>
+    <div class="space-y-6 md:space-y-8 max-w-4xl mx-auto px-4 w-full">
+      <!-- Project cards remain unchanged for now, only linking certificates -->
+      <div class="premium-card p-6">
+        <h3 class="text-xl md:text-2xl font-semibold gradient-text">Super Market Sales Analysis</h3>
+        <p class="text-xs md:text-sm body-text opacity-80 mt-1">2025</p>
+        <p class="body-text mt-3 text-sm md:text-base">Developed a Tableau Dashboard to analyze sales trends relative to customer ratings, achieving a 10% sales increase through quality production recommendations.</p>
+        <p class="body-text mt-3 text-sm md:text-base font-medium">Technologies: <span class="opacity-90">Tableau</span></p>
+        <a href="https://github.com/Vigneshyadav08" target="_blank" rel="noopener noreferrer" class="link-hover mt-3 inline-block text-sm md:text-base">View on GitHub &rarr;</a>
+      </div>
+      <div class="premium-card p-6">
+        <h3 class="text-xl md:text-2xl font-semibold gradient-text">IMDB Film Data Insights</h3>
+        <p class="text-xs md:text-sm body-text opacity-80 mt-1">Mar 2025</p>
+        <p class="body-text mt-3 text-sm md:text-base">Analyzed IMDB Top 250 movie dataset using Python libraries, uncovering trends in film ratings influenced by genre and director consistency.</p>
+        <p class="body-text mt-3 text-sm md:text-base font-medium">Technologies: <span class="opacity-90">Python, Pandas, Matplotlib, Seaborn</span></p>
+        <a href="https://github.com/Vigneshyadav08" target="_blank" rel="noopener noreferrer" class="link-hover mt-3 inline-block text-sm md:text-base">View on GitHub &rarr;</a>
+      </div>
+      <div class="premium-card p-6">
+        <h3 class="text-xl md:text-2xl font-semibold gradient-text">Netflix Data Analysis</h3>
+        <p class="text-xs md:text-sm body-text opacity-80 mt-1">Feb 2025</p>
+        <p class="body-text mt-3 text-sm md:text-base">Created interactive Tableau visualizations to explore Netflix dataset, providing insights into content distribution, genres, and ratings.</p>
+        <p class="body-text mt-3 text-sm md:text-base font-medium">Technologies: <span class="opacity-90">Tableau</span></p>
+        <a href="https://github.com/Vigneshyadav08" target="_blank" rel="noopener noreferrer" class="link-hover mt-3 inline-block text-sm md:text-base">View on GitHub &rarr;</a>
+      </div>
+       <div class="premium-card p-6">
+        <h3 class="text-xl md:text-2xl font-semibold gradient-text">Python-based Ranking System</h3>
+        <p class="text-xs md:text-sm body-text opacity-80 mt-1">Feb 2025</p>
+        <p class="body-text mt-3 text-sm md:text-base">Designed a Python-based ranking system for classroom use, optimized for large datasets, successfully ranking over 100 students.</p>
+        <p class="body-text mt-3 text-sm md:text-base font-medium">Technologies: <span class="opacity-90">Python</span></p>
+        <a href="https://github.com/Vigneshyadav08" target="_blank" rel="noopener noreferrer" class="link-hover mt-3 inline-block text-sm md:text-base">View on GitHub &rarr;</a>
+      </div>
+      <div class="premium-card p-6">
+        <h3 class="text-xl md:text-2xl font-semibold gradient-text">Flight Fare Data Trend Analysis</h3>
+        <p class="text-xs md:text-sm body-text opacity-80 mt-1">July 2024</p>
+        <p class="body-text mt-3 text-sm md:text-base">Conducted trend analysis on flight fare data using Python, improving booking efficiency by 6% through insights on optimal booking times.</p>
+        <p class="body-text mt-3 text-sm md:text-base font-medium">Technologies: <span class="opacity-90">Python, Pandas, Matplotlib, Seaborn, NumPy</span></p>
+        <a href="https://github.com/Vigneshyadav08" target="_blank" rel="noopener noreferrer" class="link-hover mt-3 inline-block text-sm md:text-base">View on GitHub &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="achievements" class="section">
+     <h2 class="text-4xl md:text-5xl font-bold text-center gradient-text mb-10 md:mb-12">Achievements</h2>
+     <div class="space-y-6 md:space-y-8 max-w-4xl mx-auto px-4 w-full">
+       <div class="premium-card p-5 md:p-6 text-center">
+         <p class="text-base md:text-lg body-text">Python <span class="font-semibold gradient-text">3 Star Silver</span> Badge (HackerRank, Feb 2025)</p>
+       </div>
+       <div class="premium-card p-5 md:p-6 text-center">
+         <p class="text-base md:text-lg body-text">SQL <span class="font-semibold gradient-text">4 Star Gold</span> Badge (HackerRank, Feb 2025)</p>
+       </div>
+     </div>
+  </section>
+
+  <section id="contact" class="section bg-[rgba(10,10,26,0.6)]">
+    <h2 class="text-4xl md:text-5xl font-bold text-center gradient-text mb-10 md:mb-12">Get In Touch</h2>
+    <div class="text-center max-w-4xl mx-auto px-4 space-y-4 md:space-y-5">
+      <p class="text-base md:text-lg body-text">
+        Email: <a href="/cdn-cgi/l/email-protection#4d3b2823262c393e2c243b242a23283e250d2a202c2421632e2220" class="link-hover"><span class="__cf_email__" data-cfemail="1e6c7b70757f6a6d7f77687779707b6d765e79737f7772307d7173">[email&#160;protected]</span></a>
+      </p>
+      <p class="text-base md:text-lg body-text">
+        Phone: <a href="tel:+918639286082" class="link-hover">+91-8639286082</a>
+      </p>
+      <p class="text-base md:text-lg body-text">
+        LinkedIn: <a href="https://linkedin.com/in/venkata-sai-vignesh-vommi" target="_blank" rel="noopener noreferrer" class="link-hover">venkata-sai-vignesh-vommi</a>
+      </p>
+      <p class="text-base md:text-lg body-text">
+        GitHub: <a href="https://github.com/Vigneshyadav08" target="_blank" rel="noopener noreferrer" class="link-hover">Vigneshyadav08</a>
+      </p>
+    </div>
+
+    <!-- Buttons were moved to the Home section -->
+
+     <footer class="mt-16 text-center text-sm body-text opacity-70">
+        © <span id="current-year"></span> V.V.S. Vignesh. All Rights Reserved.
+     </footer>
+  </section>
+
+  <!-- Cloudflare Email Decode Script -->
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+
+  <!-- Inline JavaScript -->
+  <script>
+    // Set Current Year in Footer
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+
+    // Waveform Background Animation
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const waves = [];
+    const waveCount = 5; // Increased number of waves
+
+    class Wave {
+      constructor(y, amplitude, frequency) {
+        this.y = y;
+        this.amplitude = amplitude;
+        this.frequency = frequency;
+        this.phase = Math.random() * Math.PI * 2;
+        this.opacity = 0.6 + Math.random() * 0.3; // Varying opacity
+        this.lineWidth = 1 + Math.random() * 1.5; // Varying line width
+      }
+
+      update(time) {
+        // Varying speed slightly for each wave
+        this.phase += 0.005 + (this.frequency * 0.5);
+      }
+
+      draw() {
+        ctx.beginPath();
+        // Subtle gradient from transparent cyan to darker blue/purple
+        const gradient = ctx.createLinearGradient(0, this.y - this.amplitude, 0, this.y + this.amplitude);
+        gradient.addColorStop(0, `rgba(34, 211, 238, ${this.opacity * 0.3})`); // More subtle start
+        gradient.addColorStop(0.5, `rgba(56, 189, 248, ${this.opacity * 0.6})`); // Mid color
+        gradient.addColorStop(1, `rgba(129, 140, 248, ${this.opacity * 0.2})`); // Subtle end
+
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = this.lineWidth;
+
+        ctx.moveTo(0, this.y + Math.sin(this.phase) * this.amplitude); // Start precisely
+
+        for (let x = 1; x < canvas.width; x++) { // Iterate per pixel for smoothness
+          const yPos = this.y + Math.sin(x * this.frequency + this.phase) * this.amplitude;
+          ctx.lineTo(x, yPos);
+        }
+        ctx.stroke();
+      }
+    }
+
+    function createWaves() {
+      waves.length = 0; // Clear existing waves
+      for (let i = 0; i < waveCount; i++) {
+        const y = canvas.height * (0.1 + i * (0.8 / (waveCount -1))); // Distribute waves across 80% of height
+        const amplitude = 30 + Math.random() * 40; // Dynamic amplitude
+        const frequency = 0.0015 + Math.random() * 0.0025; // Dynamic frequency
+        waves.push(new Wave(y, amplitude, frequency));
+      }
+    }
+
+    let lastTime = 0;
+    function animateWaves(currentTime) {
+      const deltaTime = currentTime - lastTime;
+      // Clear canvas with a slightly transparent dark color for a subtle trail effect
+      ctx.fillStyle = 'rgba(10, 10, 26, 0.9)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const time = currentTime * 0.001; // Convert ms to seconds for smoother animation speed control
+
+      waves.forEach(wave => {
+        wave.update(time);
+        wave.draw();
+      });
+
+      lastTime = currentTime;
+      requestAnimationFrame(animateWaves);
+    }
+
+    createWaves();
+    requestAnimationFrame(animateWaves); // Start the animation loop
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      createWaves(); // Recreate waves for new dimensions
+    }, false);
+
+
+    // Role Animation
+    const roles = document.querySelectorAll('.role-card');
+    let currentRole = 0;
+
+    function switchRole() {
+      roles.forEach((role, index) => {
+        role.classList.remove('active');
+      });
+      roles[currentRole].classList.add('active');
+      currentRole = (currentRole + 1) % roles.length;
+    }
+
+    // Initial call and interval
+    if (roles.length > 0) {
+        switchRole(); // Show the first role immediately
+        setInterval(switchRole, 3000);
+    }
+
+
+    // Mobile Menu Toggle
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileNavLinks = mobileMenu.querySelectorAll('.mobile-nav-item');
+
+    mobileMenuButton.addEventListener('click', () => {
+        // Check based on transform style OR absence of style (initial state)
+        const isHidden = !mobileMenu.style.transform || mobileMenu.style.transform === 'translateY(-100%)';
+        if (isHidden) {
+            mobileMenu.style.transform = 'translateY(0)';
+            mobileMenu.style.zIndex = '40'; // Bring it above content when open
+        } else {
+            mobileMenu.style.transform = 'translateY(-100%)';
+            // Delay setting z-index back to allow transition
+             setTimeout(() => {
+                 // Only set z-index back if it's still hidden (user didn't re-click rapidly)
+                 if (mobileMenu.style.transform === 'translateY(-100%)') {
+                    mobileMenu.style.zIndex = '-10';
+                 }
+             }, 300); // Match transition duration
+        }
+    });
+
+
+    // Close mobile menu when a link is clicked
+    mobileNavLinks.forEach(link => {
+        // MODIFIED: Only close menu if it's an internal link or the gallery link
+        const href = link.getAttribute('href');
+        const isInternalNav = href.startsWith('#');
+        const isGalleryLink = href === 'gallery.html';
+
+        if (isInternalNav || isGalleryLink) {
+            link.addEventListener('click', () => {
+                mobileMenu.style.transform = 'translateY(-100%)';
+                 setTimeout(() => {
+                     mobileMenu.style.zIndex = '-10';
+                 }, 300);
+            });
+        }
+    });
+
+
+    // Smooth Scroll (Only for internal links)
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const hrefAttribute = this.getAttribute('href');
+        // Ensure it's a valid ID selector and not just "#"
+        if (hrefAttribute && hrefAttribute.length > 1 && hrefAttribute.startsWith('#')) {
+            const targetElement = document.querySelector(hrefAttribute);
+            if (targetElement) {
+                e.preventDefault();
+                // Calculate offset for fixed navbar if necessary
+                const navHeight = document.querySelector('nav')?.offsetHeight || 0;
+                const elementPosition = targetElement.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - navHeight;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
+            }
+        }
+      });
+    });
+
+    // GSAP Animations
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Animate sections on scroll
+    gsap.utils.toArray('.section').forEach((section, index) => {
+      // Select all potential elements within the section
+      const elems = section.querySelectorAll('h1, h2, h3, p, .premium-card, .skill-card, img, footer, .home-button, .certificate-link'); // Added .certificate-link
+
+      // FIX: Use different toggleActions for the home section vs others
+      const useToggleActions = (section.id === 'home')
+                             ? 'play none none none' // For home: Play once on enter, don't reverse
+                             : 'play none none reverse'; // For others: Play on enter, reverse on leave
+
+      gsap.from(elems, {
+        opacity: 0,
+        y: 60, // Slightly increased distance
+        duration: 0.8, // Slightly faster animation
+        stagger: 0.1, // Reduced stagger slightly
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 85%', // Trigger slightly later
+          end: 'bottom 15%', // Define end point
+          toggleActions: useToggleActions, // Apply the conditional toggleActions
+          // markers: true, // Uncomment to debug ScrollTrigger
+        }
+      });
+    });
+
+    // Subtle Logo Animation
+    gsap.to('.logo-animation', {
+      scale: 1.03,
+      opacity: 0.95,
+      repeat: -1,
+      yoyo: true,
+      duration: 2.5,
+      ease: 'power1.inOut'
+    });
+
+    // Initial fade-in for elements potentially above the fold
+    gsap.to('.animate-fade-in', { opacity: 1, duration: 1, delay: 0.5, ease: 'power2.inOut' });
+    // Animate name and home buttons together slightly later
+    gsap.to('.animate-slide-up', { opacity: 1, y: 0, duration: 1, delay: 0.7, stagger: 0.1, ease: 'power3.out' });
+
+  </script>
+
+  <!-- Cloudflare Challenge Script (Can usually be removed if not needed) -->
+  <!-- <script>(function(){ ... })()</script> -->
+
+</body>
+</html>
